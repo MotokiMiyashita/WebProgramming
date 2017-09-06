@@ -1,0 +1,43 @@
+div {
+/*  	color: red; */
+	text-align: center;
+}
+
+#elem{
+	font-weight: bold;
+}
+
+ul li {
+    list-style: none;
+    margin-bottom: 20px;
+}
+label{
+	margin-right: 20px;
+}
+
+
+#login{
+	padding:4px 25px;
+	background-color: whitesmoke;
+	font-weight: bold;
+}
+
+.br::before {
+	content: "\A\A" ;
+	white-space: pre ;
+}
+
+.br2::before {
+	content: "\A" ;
+	white-space: pre ;
+}
+
+
+.error_message{
+	margin-left:50px;
+	color: red;
+}
+.finish_message{
+	margin-left:20px;
+	color: lime;
+}

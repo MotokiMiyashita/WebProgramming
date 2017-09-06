@@ -1,0 +1,91 @@
+@charset "UTF-8";
+.main{
+	border:1px solid black;
+	margin:60px;
+	width:400px;
+	text-align: center;
+	margin-left: 110px;
+}
+
+#topRight{
+	text-align:right;
+	background-color:dimgray;
+	border-bottom:1px solid black;
+}
+.username{
+	font-weight: bold;
+	color:white;
+}
+.logout{
+	margin-left: 15px;
+	margin-right: 10px;
+	color:red;
+}
+.error_message{
+	margin-left:50px;
+	color: red;
+}
+
+form ul li {
+    list-style: none;
+    margin-bottom: 20px;
+}
+form ul li label{
+	margin-right: 40px;
+	width: 140px;
+    float: left;
+    font-weight: bold;
+}
+form ul li{
+	text-align:left;
+}
+form{
+	margin-top: 50px;
+}
+
+.update{
+	text-align:center;
+	margin-top:50px;
+}
+.update_bottom{
+	padding:4px 40px;
+	background-color: whitesmoke;
+	font-weight: bold;
+}
+
+.toUserlist{
+	text-align:left;
+	margin-top:20px;
+	margin-left:40px;
+	margin-bottom:15px;
+}
+
+.result2{
+	color:red;
+}
+
+
+
+a {
+/* 	font-size: 100%; */
+	font-weight: bold;
+	color: blue;
+	text-decoration: none;
+}
+a:hover {
+	/* 	color: #9900FF;*/
+	text-decoration: underline;
+	/* font-style: italic;*/
+}
+
+#topRight a{
+	/* 	font-size: 100%; */
+	font-weight: bold;
+	color: red;
+	text-decoration: none;
+}
+#topRight a:hover {
+	/* 	color: #9900FF;*/
+	text-decoration: underline;
+	/* font-style: italic;*/
+}
