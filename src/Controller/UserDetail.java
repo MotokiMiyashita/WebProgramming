@@ -38,12 +38,14 @@ public class UserDetail extends HttpServlet {
 		if (session.getAttribute("ub") == null) {
 			response.sendRedirect("Login");
 		}else {
-			String select_login_id = request.getParameter("login_id");
-		    UserDao usrDao = new UserDao();
-			UserBeans detailUser = usrDao.searchDetail(select_login_id);
-			request.setAttribute("du", detailUser);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userDetail.jsp");
-			dispatcher.forward(request, response);
+			response.sendRedirect("Login");
+//			String select_login_id = (String)request.getAttribute("selectedUserID");
+////			String select_login_id = request.getParameter("login_id");
+//		    UserDao usrDao = new UserDao();
+//			UserBeans detailUser = usrDao.searchDetail(select_login_id);
+//			request.setAttribute("du", detailUser);
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userDetail.jsp");
+//			dispatcher.forward(request, response);
 		}
 	}
 
@@ -52,6 +54,15 @@ public class UserDetail extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+
+		String selectID = request.getParameter("selectedID");
+	    UserDao usrDao = new UserDao();
+		UserBeans detailUser = usrDao.searchDetail(selectID);
+		request.setAttribute("du", detailUser);
+		System.out.println("test UserDtail1");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userDetail.jsp");
+		dispatcher.forward(request, response);
+
 
 	}
 

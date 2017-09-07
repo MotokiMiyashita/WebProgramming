@@ -1,9 +1,5 @@
 @charset "UTF-8";
-#test{
-    margin: 0 auto;
-    position:relative;
-}
-#main{
+.main{
 	position:relative;
 	text-align:center;
 	border:1px solid black;
@@ -13,11 +9,23 @@
 }
 
 /* ページ右上 */
-#topRight{
+.topRight{
 	text-align:right;
-	background-color:dimgray;
+	background-color: dimgray;
 	border-bottom:1px solid black;
 }
+.topRight a {
+	font-size: 100%;
+	font-weight: bold;
+	color: red;
+	text-decoration: none;
+}
+.topRight a:hover {
+	/* 	color: #9900FF;*/
+	text-decoration: underline;
+	/* font-style: italic;*/
+}
+
 .username{
 	font-weight: bold;
 	color: white;
@@ -26,17 +34,6 @@
  	margin-left: 15px;
 	margin-right: 10px;
 	color:red;
-}
-#topRight a {
-	font-size: 100%;
-	font-weight: bold;
-	color: red;
-	text-decoration: none;
-}
-#topRight a:hover {
-	/* 	color: #9900FF;*/
-	text-decoration: underline;
-	/* font-style: italic;*/
 }
 
 /* ページ内容 */
@@ -80,18 +77,18 @@ ul li label{
     margin: 0 30px;
 }
 
-a {
+/* a {
 	font-size: 100%;
 	font-weight: bold;
 	color: blue;
 	text-decoration: none;
 }
 a:hover {
-	/* 	color: #9900FF;*/
+		color: #9900FF;
 	text-decoration: underline;
-	/* font-style: italic;*/
+	font-style: italic;
 }
-
+ */
 
 /* ユーザー一覧 */
 hr {
@@ -109,38 +106,59 @@ table,tr,th,td{
 	 border-spacing: 0px;
 }
 .listElem{
-	margin-left:2px;
- 	margin-right:25px;
+ 	text-align: center;
+	margin-left:10px;
+ 	margin-right:10px;
+
 }
 .title{
 	background-color: gainsboro;
 /*     background-image:-moz-linear-gradient(top);
     background-image:-webkit-gradient(linear,left top,left bottom); */
 }
+
+ul.nav{
+	margin-left: 0px;
+	padding-left: 10px;
+	margin-top: 0px;
+ 	padding-top: 0px;
+	margin-bottom: 0px;
+    margin-right: 10px;
+	padding-bottom: 0px;
+
+}
+ul.nav form{
+  display: inline-block;
+
+}
+
+
 .detail{
-/*  	background-color:dodgerblue;*/
-  	background-color:blue;
-	padding: 2px 5px;
+ 	background-color:dodgerblue;
+ 	margin-top: 2px;
+ 	margin-bottom: 2px;
+ 	padding: 2px 6px;
 	color: white;
 	font-weight: normal;
+	font-size: 80%;
 }
 .update{
-/* 	background-color:limegreen; */
-  	background-color:green;
-	padding: 2px 5px;
+ 	background-color:limegreen;
+ 	padding: 2px 6px;
 	color: white;
 	font-weight: normal;
+	font-size: 80%;
 }
 
-.delete{
-/* 	background-color:tomato; */
-  	background-color:red;
-	padding: 2px 5px;
+.remove{
+	background-color:tomato;
+ 	padding: 2px 6px;
 	color: white;
 	font-weight: normal;
+	font-size: 80%;
 }
 
-.result1{
-	color:lime;
+.resultmessage{
+	color: lime;
 	margin-bottom: 20px;
 }

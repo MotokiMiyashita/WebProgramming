@@ -34,15 +34,20 @@ public class UserRemove extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		if (session.getAttribute("ub") == null) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
-			dispatcher.forward(request, response);
+			response.sendRedirect("Login");
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+//			dispatcher.forward(request, response);
 		}else {
-			String login_id = request.getParameter("login_id");
-		    UserDao usrDao = new UserDao();
-			UserBeans detailUser = usrDao.searchDetail(login_id);
-			request.setAttribute("du", detailUser);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userRemove.jsp");
-			dispatcher.forward(request, response);
+			if(!((String)session.getAttribute("ub")).equals("admin")){
+				response.sendRedirect("UserList");
+			}
+			response.sendRedirect("Login");
+//			String login_id = request.getParameter("login_id");
+//		    UserDao usrDao = new UserDao();
+//			UserBeans detailUser = usrDao.searchDetail(login_id);
+//			request.setAttribute("du", detailUser);
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userRemove.jsp");
+//			dispatcher.forward(request, response);
 		}
 	}
 
@@ -51,10 +56,18 @@ public class UserRemove extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String ok = request.getParameter("ok");
-		String cancel = request.getParameter("cancel");
-		String login_id = request.getParameter("login_id");
+		//確認画面
+		String selectedID = request.getParameter("selectedID");
+		if(selectedID!=null) {
+		    UserDao usrDao = new UserDao();
+			UserBeans detailUser = usrDao.searchDetail(selectedID);
+			request.setAttribute("du", detailUser);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userRemove.jsp");
+			dispatcher.forward(request, response);
+		}
 
+		//削除処理
+		String login_id = request.getParameter("login_id");
 	    UserDao usrDao = new UserDao();
 		boolean isCollectResister = true;
 		isCollectResister = usrDao.removeUser(login_id);
@@ -62,8 +75,10 @@ public class UserRemove extends HttpServlet {
 
 		}else {
 			String message = "ユーザー情報の削除に成功しました。";
-			request.setAttribute("resister_success_message", message);
-			response.sendRedirect("UserList");
+			request.setAttribute("success_message", message);
+//			response.sendRedirect("UserList");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("UserList");
+			dispatcher.forward(request, response);
 		}
 	}
 

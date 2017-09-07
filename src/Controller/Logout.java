@@ -36,11 +36,11 @@ public class Logout extends HttpServlet {
 		else{
 			session.removeAttribute("ub");
 			session.invalidate();
-			//response.sendRedirect("Login");
 			String message = "ログアウトしました";
 			request.setAttribute("finish_message", message);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 			dispatcher.forward(request, response);
+			//response.sendRedirect("Login");
 		}
 	}
 

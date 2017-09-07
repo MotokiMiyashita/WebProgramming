@@ -40,8 +40,6 @@ public class Login extends HttpServlet {
 		}else {
 			System.out.println("has session");
 			response.sendRedirect("UserList");
-//			RequestDispatcher dispatcher = request.getRequestDispatcher("UserList");
-//			dispatcher.forward(request, response);
 		}
 	}
 
@@ -49,8 +47,6 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		 response.getWriter().append("Served at: posttttt ");
-//		 HttpSession session = request.getSession();
 		request.setCharacterEncoding("UTF-8");
 		String input_id = request.getParameter("login_id");
 		String input_password = request.getParameter("login_password");

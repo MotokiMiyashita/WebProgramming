@@ -40,7 +40,7 @@
 						<input type="date" name="birth_date" size="20" value="${requestScope.value.getBirth_date()}"></li>
 				</ul>
 
-<!-- <div class="result2">入力された内容は正しくありません<div> -->麻
+<!-- <div class="result2">入力された内容は正しくありません<div> -->
  				<input type="hidden" name="create_date" value="<%= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) %>">
  				<input type="hidden" name="update_date" value="<%= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) %>">
 				<div class="resister"><input type="submit" value="登録" class="resister_bottom"></div>

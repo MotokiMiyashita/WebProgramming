@@ -34,15 +34,17 @@ public class UserUpdate extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		if (session.getAttribute("ub") == null) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
-			dispatcher.forward(request, response);
+			response.sendRedirect("Login");
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+//			dispatcher.forward(request, response);
 		}else {
-			String login_id = request.getParameter("login_id");
-		    UserDao usrDao = new UserDao();
-			UserBeans detailUser = usrDao.searchDetail(login_id);
-			request.setAttribute("du", detailUser);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userUpdate.jsp");
-			dispatcher.forward(request, response);
+			response.sendRedirect("Login");
+//			String login_id = request.getParameter("login_id");
+//		    UserDao usrDao = new UserDao();
+//			UserBeans detailUser = usrDao.searchDetail(login_id);
+//			request.setAttribute("du", detailUser);
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userUpdate.jsp");
+//			dispatcher.forward(request, response);
 		}
 	}
 
@@ -51,9 +53,17 @@ public class UserUpdate extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession(false);
-		UserBeans ub = (UserBeans)session.getAttribute("ub");
+		//初期表示
+		String selectedID = request.getParameter("selectedID");
+		if(selectedID!=null) {
+		    UserDao usrDao = new UserDao();
+			UserBeans detailUser = usrDao.searchDetail(selectedID);
+			request.setAttribute("du", detailUser);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userUpdate.jsp");
+			dispatcher.forward(request, response);
+		}
 
+		//入力の処理
 		String login_id = request.getParameter("login_id");
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
@@ -63,29 +73,24 @@ public class UserUpdate extends HttpServlet {
 
 
 	    UserDao usrDao = new UserDao();
-		boolean isCollectResister = true;
-		isCollectResister = usrDao.updateUser(login_id, password, confPassword, name, birth_date, update_date);
-		if(!isCollectResister) {
+		if(!usrDao.updateUser(login_id, password, confPassword, name, birth_date, update_date)) {
 
 			String error_message = "入力された内容は正しくありません。";
 			request.setAttribute("error_message", error_message);
-			if( !password.equals(confPassword) ) {
-				UserBeans formValue = new UserBeans();
-				formValue.setLogin_id(login_id);
-				formValue.setName(name);
-				formValue.setBirth_date(birth_date);
-				request.setAttribute("du", formValue);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userUpdate.jsp");
-				dispatcher.forward(request, response);
-			//	response.sendRedirect("UserUpdate");
-			}
+			UserBeans formValue = new UserBeans();
+			formValue.setLogin_id(login_id);
+			formValue.setName(name);
+			formValue.setBirth_date(birth_date);
+			request.setAttribute("du", formValue);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userUpdate.jsp");
 			dispatcher.forward(request, response);
 
 		}else {
-			String message = "ユーザー情報の登録に成功しました。";
-			request.setAttribute("resister_success_message", message);
-			response.sendRedirect("UserList");
+			String message = "ユーザー情報の更新に成功しました。";
+			//System.out.println("UserUpdate");
+			request.setAttribute("success_message", message);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("UserList");
+			dispatcher.forward(request, response);
 		}
 	}
 }

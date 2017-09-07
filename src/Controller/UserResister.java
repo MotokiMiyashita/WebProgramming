@@ -34,9 +34,9 @@ public class UserResister extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		if (session.getAttribute("ub") == null) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
-			dispatcher.forward(request, response);
-//			response.sendRedirect("Login");
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+//			dispatcher.forward(request, response);
+			response.sendRedirect("Login");
 		}else {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userResister.jsp");
 			dispatcher.forward(request, response);
@@ -55,16 +55,14 @@ public class UserResister extends HttpServlet {
 		String birth_date = request.getParameter("birth_date");
 		String create_date = request.getParameter("create_date");
 		String update_date = request.getParameter("update_date");
+	    if(login_id==null || name==null || password==null || confPassword ==null
+	    		|| birth_date==null || create_date==null || update_date==null) response.sendRedirect("Login");
 
 	    UserDao usrDao = new UserDao();
-	//	System.out.println("date: " +create_date + "  " + update_date);
-		boolean isCollectResister = true;
-		isCollectResister = usrDao.resisterUser(login_id, password, confPassword, name, birth_date, create_date, update_date);
-		if(!isCollectResister) {
+		if(!usrDao.resisterUser(login_id, password, confPassword, name, birth_date, create_date, update_date)) {
 
 			String error_message = "入力された内容は正しくありません。";
 			request.setAttribute("error_message", error_message);
-			if( !password.equals(confPassword) && !password.equals(null) ) {
 				UserBeans formValue = new UserBeans();
 				formValue.setLogin_id(login_id);
 				formValue.setName(name);
@@ -72,15 +70,12 @@ public class UserResister extends HttpServlet {
 				request.setAttribute("value", formValue);
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userResister.jsp");
 				dispatcher.forward(request, response);
-			//	response.sendRedirect("UserResister");
-			}
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userResister.jsp");
-			dispatcher.forward(request, response);
 
 		}else {
 			String message = "ユーザー情報の登録に成功しました。";
-			request.setAttribute("resister_success_message", message);
-			response.sendRedirect("UserList");
+			request.setAttribute("success_message", message);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("UserList");
+			dispatcher.forward(request, response);
 		}
 	}
 
