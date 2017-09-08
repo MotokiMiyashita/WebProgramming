@@ -58,6 +58,7 @@ public class UserResister extends HttpServlet {
 	    if(login_id==null || name==null || password==null || confPassword ==null
 	    		|| birth_date==null || create_date==null || update_date==null) response.sendRedirect("Login");
 
+
 	    UserDao usrDao = new UserDao();
 		if(!usrDao.resisterUser(login_id, password, confPassword, name, birth_date, create_date, update_date)) {
 

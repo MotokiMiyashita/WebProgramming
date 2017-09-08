@@ -25,20 +25,18 @@ public class Util {
 	}
 
 	/**
-	 * パラメータに１つでも値がなかったらfalseを返す
+	 * パラメータに空があった場合trueを返す
 	 * @param params
 	 * @return
 	 */
 	public static boolean isEmptyCheck(String[] params) {
-		boolean result = true;
-
+		boolean result = false;
 		for (String param : params) {
 			if (param.isEmpty()) {
-				result = false;
+				result = true;
 				break;
 			}
 		}
-
 		return result;
 	}
 

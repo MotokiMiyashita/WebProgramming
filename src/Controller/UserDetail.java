@@ -1,6 +1,9 @@
 package Controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -58,12 +61,34 @@ public class UserDetail extends HttpServlet {
 		String selectID = request.getParameter("selectedID");
 	    UserDao usrDao = new UserDao();
 		UserBeans detailUser = usrDao.searchDetail(selectID);
+
+		try {
+			String strDate = detailUser.getCreate_date();
+			SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Date date = sdFormat.parse(strDate);
+			String str = new SimpleDateFormat("yyyy年MM月dd hh:mm").format(date);
+			detailUser.setCreate_date(str);
+
+			strDate = detailUser.getUpdate_date();
+			sdFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			date = sdFormat.parse(strDate);
+			str = new SimpleDateFormat("yyyy年MM月dd hh:mm").format(date);
+			detailUser.setUpdate_date(str);
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
 		request.setAttribute("du", detailUser);
-		System.out.println("test UserDtail1");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userDetail.jsp");
 		dispatcher.forward(request, response);
 
-
 	}
-
 }
+
+
+//String tmp = detailUser.getCreate_date();
+//String[] value1 = tmp.split(" ");
+//String[] value2 = value1[0].split("-");
+//for(String str : value2) System.out.println(str);
+//detailUser.setCreate_date(value2[0]+"月"+value2[1]+"年"+value2[2]+"日");

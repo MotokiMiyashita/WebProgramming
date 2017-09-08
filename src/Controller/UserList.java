@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.UserDao;
+import model.SearchBeans;
 import model.UserBeans;
-
 
 /**
  * Servlet implementation class UserList
@@ -86,13 +86,19 @@ public class UserList extends HttpServlet {
 			//if(query_login_id!=null) searchUserList = usrDao.searchByID(query_login_id);
 		}
 
+		SearchBeans formValue = new SearchBeans();
+		formValue.setLogin_id(query_login_id);
+		formValue.setName(query_name);
+		formValue.setStartBirth(query_startBirth);
+		formValue.setEndBirth(query_endBirth);
+		request.setAttribute("fv", formValue);
+
 		request.setAttribute("showHitUser",searchUserList);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userList.jsp");
 		dispatcher.forward(request, response);
 	}
 
 }
-
 
 
 

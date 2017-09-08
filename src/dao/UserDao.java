@@ -11,7 +11,14 @@ import model.UserBeans;
 
 public class UserDao {
 
-	//ログイン-ユーザー存在判定
+
+	/**
+	 * ユーザー存在判定<br>
+	 * 該当ユーザーが存在しない,パスワードが違う場合falseを返す
+	 * @param query_id
+	 * @param query_password
+	 * @return
+	 */
 	public boolean existUser(String query_id, String query_password) {
 		Connection conn = null;
 		try {
@@ -29,7 +36,13 @@ public class UserDao {
 			return false;
 		}
 	}
-	//ユーザー登録時 ログインIDが使用されているかどうか
+
+	/**
+	 * ユーザー登録時<br>
+	 * ログインIDが使用されているかどうか
+	 * @param query_id
+	 * @return
+	 */
 	public boolean existUser(String query_id) {
 		Connection conn = null;
 		try {
@@ -46,31 +59,12 @@ public class UserDao {
 		}
 	}
 
-	//ログイン-セッション情報保存
-	public UserBeans setUserBeans(String query_id){
-		Connection conn = null;
-		UserBeans ub = new UserBeans();
-		try {
-			conn = DBManager.getConnection();
-			String sql = "SELECT * FROM user WHERE login_id = ?;";
-			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setString(1, query_id);
-			ResultSet rs = pStmt.executeQuery();
-			rs.next();
-			String searched_name = rs.getString("name");
-			ub.setLogin_id(query_id);
-			ub.setName(searched_name);
-			return ub;
 
-		}catch(SQLException e){
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-
-
-	//ユーザー検索(一覧)
+	//
+	/**ユーザー検索(一覧)<br>
+	 * DBの各ユーザー情報が詰まったビーンズのリストを返す
+	 * @return
+	 */
 	public List<UserBeans> findAll() {
 		Connection conn = null;
 		List<UserBeans> usrList = new ArrayList<UserBeans>();
@@ -98,8 +92,11 @@ public class UserDao {
 		return usrList;
 	}
 
-
-	//ユーザー検索(ログイン名)
+	/**
+	 *  ユーザー検索(ログイン名)
+	 * @param query
+	 * @return
+	 */
 	public List<UserBeans> searchByID(String query) {
 		Connection conn = null;
 		List<UserBeans> usrList = new ArrayList<UserBeans>();
@@ -109,19 +106,20 @@ public class UserDao {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, query);
 			ResultSet rs = pStmt.executeQuery();
-		      while (rs.next()) {
-		    	  	String login_id = rs.getString("login_id");
-		    	  	String name = rs.getString("name");
-		    	  	String birth_date = rs.getString("birth_date");
-		    	  	UserBeans usr = new UserBeans();
-		    	  	if(login_id.equals("admin"))continue;
-		    	  	usr.setLogin_id(login_id);
-		    	  	usr.setName(name);
-		    	  	usr.setBirth_date(birth_date);
-		    	  	usrList.add(usr);
-		    	  	//System.out.println("name");
-		    	  }
-		}catch(SQLException e){
+			while (rs.next()) {
+				String login_id = rs.getString("login_id");
+				String name = rs.getString("name");
+				String birth_date = rs.getString("birth_date");
+				UserBeans usr = new UserBeans();
+				if (login_id.equals("admin"))
+					continue;
+				usr.setLogin_id(login_id);
+				usr.setName(name);
+				usr.setBirth_date(birth_date);
+				usrList.add(usr);
+				// System.out.println("name");
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -129,7 +127,10 @@ public class UserDao {
 	}
 
 
-	//ユーザー検索(ユーザー名)
+	/**ユーザー検索(ユーザー名)
+	 * @param query
+	 * @return
+	 */
 	public List<UserBeans> searchByName(String query){
 		Connection conn = null;
 		List<UserBeans> usrList = new ArrayList<UserBeans>();
@@ -158,9 +159,8 @@ public class UserDao {
 	}
 
 
-	//ユーザー検索(誕生日)
 	/**
-	 *
+	 *ユーザー検索(誕生日)
 	 * @param query_begin
 	 * @param query_end
 	 * @return
@@ -198,10 +198,63 @@ public class UserDao {
 
 
 
+	/**ユーザー新規登録<br>
+	 * 登録成功した場合Trueを返す
+	 * @param login_id
+	 * @param password
+	 * @param confPassword
+	 * @param name
+	 * @param birth_date
+	 * @param create_date
+	 * @param update_date
+	 * @return
+	 */
+	public boolean resisterUser(String login_id, String password, String confPassword, String name, String birth_date, String create_date, String update_date ) {
+		//String[] params = {login_id, password, confPassword, name, birth_date, create_date, update_date};
+		//if( Util.isEmptyCheck(params) ) {
+		if( Util.isEmptyCheck(new String[]{login_id, password, confPassword, name, birth_date, create_date, update_date}) ) {
+			return false;
+		}
+		if( existUser(login_id) ) {
+			return false;
+		}
+		if( !password.equals(confPassword) ) {
+			return false;
+		}
+		Connection conn = null;
+		try {
+			conn = DBManager.getConnection();
+			String sql = "INSERT INTO user(login_id,name,birth_date,password,create_date,update_date) VALUES(?,?,?,?,?,?);";
+			PreparedStatement pStmt = conn.prepareStatement(sql); //order不一致の場合 construction Accessor Impl.newInstanceエラー
+			pStmt.setString(1, login_id);
+			pStmt.setString(2, name);
+			pStmt.setString(3, birth_date);
+			pStmt.setString(4, Util.hashPass(password));
+			pStmt.setString(5, create_date);
+			pStmt.setString(6, update_date);
+			//System.out.println(pStmt.toString());
+			int num = pStmt.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 
 
-
-	//ユーザー詳細情報検索
+//	//ログイン-セッション情報保存
+//	public UserBeans setUserBeans(String query_id){
+//			String sql = "SELECT * FROM user WHERE login_id = ?;";
+//			String searched_name = rs.getString("name");
+//			ub.setLogin_id(query_id);
+//			ub.setName(searched_name);
+//			return ub;
+	/**
+	 * ユーザー情報の詳細検索<br>
+	 * 指定したIDのユーザーのID、ユーザー名、誕生日、登録,更新日時を詰めたビーンズを返す
+	 * @param query
+	 * @return
+	 */
 	public UserBeans searchDetail(String query) {
 		Connection conn = null;
   		UserBeans usr = new UserBeans();
@@ -231,56 +284,31 @@ public class UserDao {
 	}
 
 
-
-
-	//ユーザー情報の登録
-	/**ユーザー新規登録
+	/**
+	 * ユーザー情報の更新が成功した場合trueを返す
 	 * @param login_id
 	 * @param password
 	 * @param confPassword
 	 * @param name
 	 * @param birth_date
-	 * @param create_date
 	 * @param update_date
 	 * @return
 	 */
-	public boolean resisterUser(String login_id, String password, String confPassword, String name, String birth_date, String create_date, String update_date ) {
-		String[] params = {login_id, password, confPassword, name, birth_date, create_date, update_date};
-		if(Util.isEmptyCheck(params)) return false;
-		if( existUser(login_id) ) return false;
-		if( !password.equals(confPassword) ) return false;
-		Connection conn = null;
-		try {
-			conn = DBManager.getConnection();
-			String sql = "INSERT INTO user(login_id,name,birth_date,password,create_date,update_date) VALUES(?,?,?,?,?,?);";
-			PreparedStatement pStmt = conn.prepareStatement(sql); //order不一致の場合 construction Accessor Impl.newInstanceエラー
-			pStmt.setString(1, login_id);
-			pStmt.setString(2, name);
-			pStmt.setString(3, birth_date);
-			pStmt.setString(4, Util.hashPass(password));
-			pStmt.setString(5, create_date);
-			pStmt.setString(6, update_date);
-			//System.out.println(pStmt.toString());
-			int num = pStmt.executeUpdate();
-		}catch(SQLException e){
-			e.printStackTrace();
+	public boolean updateUser(String login_id, String password, String confPassword, String name, String birth_date, String update_date) {
+		// if( login_id.isEmpty() || name.isEmpty() || birth_date.isEmpty() || update_date.isEmpty() ) return false;
+		if (Util.isEmptyCheck(new String[] { login_id, name, birth_date, update_date })) {
 			return false;
 		}
-		return true;
-	}
-
-	//ユーザー情報の更新
-	public boolean updateUser(String login_id, String password, String confPassword, String name, String birth_date, String update_date ) {
-
-		if( login_id.isEmpty() ||  name.isEmpty() || birth_date.isEmpty()  || update_date.isEmpty() ) return false;
-		if( (password.isEmpty() && !confPassword.isEmpty()) || (!password.isEmpty() && confPassword.isEmpty()) ) {
+		if ((password.isEmpty() && !confPassword.isEmpty()) || (!password.isEmpty() && confPassword.isEmpty())) {
 			System.out.println("work");
 			return false;
 		}
-		if( !password.equals(confPassword) ) return false;
+		if (!password.equals(confPassword)) {
+			return false;
+		}
 		Connection conn = null;
 		try {
-			if(password.isEmpty() && confPassword.isEmpty() ) {
+			if (password.isEmpty() && confPassword.isEmpty()) {
 				conn = DBManager.getConnection();
 				String sql = "UPDATE user SET name=?, birth_date=?, update_date=? WHERE login_id = ?;";
 				PreparedStatement pStmt = conn.prepareStatement(sql);
@@ -288,10 +316,10 @@ public class UserDao {
 				pStmt.setString(2, birth_date);
 				pStmt.setString(3, update_date);
 				pStmt.setString(4, login_id);
-				//System.out.println(pStmt.toString());
+				// System.out.println(pStmt.toString());
 				int num = pStmt.executeUpdate();
 
-			}else {
+			} else {
 				conn = DBManager.getConnection();
 				String sql = "UPDATE user SET name=?, birth_date=?, password=?, update_date=? WHERE login_id = ?;";
 				PreparedStatement pStmt = conn.prepareStatement(sql);
@@ -300,10 +328,10 @@ public class UserDao {
 				pStmt.setString(3, Util.hashPass(password));
 				pStmt.setString(4, update_date);
 				pStmt.setString(5, login_id);
-				//System.out.println(pStmt.toString());
+				// System.out.println(pStmt.toString());
 				int num = pStmt.executeUpdate();
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -312,9 +340,11 @@ public class UserDao {
 
 
 
-
-
-	//ユーザー情報の削除
+	/**
+	 * IDで指定されたユーザーの削除が出来たtrueを返す
+	 * @param login_id
+	 * @return
+	 */
 	public boolean removeUser(String login_id) {
 		if( login_id.isEmpty() ) return false;
 

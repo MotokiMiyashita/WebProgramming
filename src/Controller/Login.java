@@ -63,7 +63,8 @@ public class Login extends HttpServlet {
 		else {
 			session = request.getSession();
 			UserBeans ub = new UserBeans();
-			ub = usrDao.setUserBeans(input_id);
+//			ub = usrDao.setUserBeans(input_id);
+			ub = usrDao.searchDetail(input_id);
 			session.setAttribute("ub", ub);
 			response.sendRedirect("UserList");
 		}

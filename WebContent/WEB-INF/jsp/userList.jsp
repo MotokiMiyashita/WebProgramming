@@ -30,13 +30,13 @@
 			<ul>
 				<li class="elem">
 					<label for="login_id">ログインID</label>
-					<input type="text" name="login_id"  size="45" value=""></li>
+					<input type="text" name="login_id"  size="45" value="${fv.login_id}"></li>
 				<li class="elem">
 					<label for="name">ユーザ名</label>
-					<input type="text" name="name" size="45"></li>
+					<input type="text" name="name" size="45" value=""></li>
 				<li class="elem">
 					<label for="startBirth">生年月日</label>
-					<input type="date" name="startBirth" value="年/月/日"><span id="boldNot">~</span>
+					<input type="date" name="startBirth" value="年/月/日" ><span id="boldNot">~</span>
 					<input type="date" name="endBirth" value="年/月/日"><br></li>
 			</ul>
 			<div id="search"><input type="submit" value="検索" id="search_bottom"></div><br>
@@ -90,8 +90,6 @@
 
 </body>
 </html>
-
-
 
 
 
